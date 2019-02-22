@@ -1,0 +1,299 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Proof of Computing Work (PoCW)}
+\date{February 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\subsection{Purpose}
+
+The purpose of PoCW is to scale distributed calculations, by obtaining
+results of nearly perfect (measurable) quality, without the need to repeat
+calculations fully on several machines. This is achieved by providing
+meritocratic economic incentives to all participating economic agents, so
+that their interests are aligned with the network's success. As a result,
+the need for repeat calculations diminishes, and costs of calculations
+become lower and very competitive.
+
+\subsection{Problem}
+
+While distributed calculations on a blockchain network provide significant
+cost savings, by using the cheapest hardrware and electricity worldwide, and
+by avoiding administrative costs, they still face a major problem. The
+providers of calculations are not always trustworthy, so they may return
+inadequate calculation results. One easy way to fix this provblem is to
+repeat the same calculations of two or more computers; but obviously this
+doubles or multiplies the costs. PoCW addresses this problem by finding a
+way to use quality control sparingly, e.g. checking only 10\%-15\% of all
+work done, and still achieve high quality results.
+
+\subsection{Solution}
+
+The proposed solution is twofold. Firstly, a meritocratic approach is
+introduced, where network nodes need to assume responsibility by putting
+something at stake if they want to receive gains from the network. The
+greater the rewards that a participant opts for, the greater is the stake
+that will be lost if the participant does not produce contributions of
+expected quality. Secondly, verification and arbitration models are
+developed, which are essentially processes of quality control and network
+protection applied specifically to distributed ledgers. Verification is
+about re-checking random parts of work done by network participants and
+arbitration is about resolving conflicting opinions whenever they occur. In
+addition, instruments are provided to estimate the probability and costs of
+attack on the network (whether for personal gain or for disruption of its
+services) and to take counter-measures to protect the network.
+
+\section{Network operation}
+
+\subsection{Markets}
+
+PoCW\ is designed for the market of distribute calculations on GPU\ or other
+hardware. Since calculations are often used for A.I. / machine learning and
+big data, there are two complimentary markets included optionally:\ the
+markets for algorithms (kernels) and for datasets.
+
+\subsection{Economic agents that participate in the network}
+
+The platform connects and allows interaction between four categories of
+participants:
+
+a) Nodes: sellers of calculation performance on their hardware. The nodes
+that perform calculations incure costs by consuming electricity and
+amortizing the hardware. Nodes must be created by locking an amount of
+tokens into stakes (which cannot be unlocked for the duration of the active
+job).
+
+b) Kernel sellers. Researchers that are creators of data processing kernels
+(e.g. machine learning models, neural networks or other types of an
+algorithm operating homomorphic data suitable for parallel processing)
+publish their models on an open market at a price of their choice for rent
+to the end-users and earn money.
+
+c) Dataset sellers. They publish the datasets for rent at a price of their
+choice. Both algorithms and datasets can be cryptographically protected
+while being used in calculations.
+
+d)\ Customers: calculation buyers, who may also optionally buy algorithms
+and datasets (or may use their own)
+
+\subsection{Types of nodes}
+
+There are 2 types of full nodes in the network
+
+a) Worker node - performs calculations
+
+b) Verifier node - checks the calculation results to verify their correctness
+
+For successful performing of jobs, nodes are rewarded with payment. To start
+participating, a Worker node needs only a moderate stake locked as
+collateral. More advanced nodes that do higher-paid work are Verifier nodes
+that created by adjusting upwards the collateral stake. In this way, greater
+rewards come with greater responsibility towards the network.
+
+\subsection{Job creation and assignment}
+
+\begin{itemize}
+\item Customer selects from the uploaded (or upload their own) datasets and
+kernels, thus creates a job that needs to be calculated and prices it
+
+\item The job is split to many (at least 10)\ packages
+
+\item A lottery distributes the job to random available Worker nodes,
+filtering them so as to include only those who agree to the job price. Each
+Workering nodes receives one package
+
+\item A lottery selects a predetermined percentage of packages (e.g. 10\%)
+and sends it to random Verifier nodes, each receiving one package
+
+\item If at any stage a Node provides no response, it is penalised by losing
+some of its stake, and its active work is reassigned to a different Node
+\end{itemize}
+
+\subsection{Consensus rounds}
+
+PoCW consensus operates in rounds. There are four possible rounds: two
+obligatory and two optional that occur only when needed.
+
+1)\textbf{\ Computation}. The assigned Worker nodes do the calculations,
+incurring cost c (e.g. electricity bills and amortization of hardware
+equipment). Then they return the result, protected cryptographically so that
+the Verifier cannot read it yet. Alternatively, the Worker node might report
+a fake result without doing calculations and without incurring the cost (we
+call this option "cheating").
+
+2) \textbf{Verification}. The Verifier node receives the result, which is at
+the time cryptographically protected, and stores it. Then it does a checking
+of calculations. Let's call p the share of the calculations that are checked
+by verification. A logical viable level would be p = (0.05, 0.30), i.e.
+0.05\%-30\% of calculation duplication. Then, $p$ is also the probability to
+discover a cheating, at the network level. Alternatively, the Verifier might
+report a fake result without doing calculations and without incurring the
+cost. However, the Verifier node does not know the answer that the Working
+node has given until Verifier's answer is published. After that, the answers
+of Verifier and Worker node are revealed. If they are the same, both nodes
+are paid for their work and the results are given to Customer. If answers
+are not the same, then Working node is found guilty and it has the right to
+appeal for an arbitration -- or be penalised on its stake and reputation.
+
+3) \textbf{Arbitration. }If the customer checks the results of verification
+(this check may be outsoursed to a third party) and decides that the quality
+of calculations are poor, he may decide not to pay for the work and not
+receive the results. This will cost him a portion of payment (to avoid spam)
+and will trigger penalties for the nodes found faulty.
+
+\section{Incentives and economics}
+
+\subsection{Incentivisation}
+
+\begin{itemize}
+\item Kernel authors \& dataset owners sell unique products and it is in
+their interest to provide precise descriptions of their product that will
+help the buyer to match the product and his business or research task.
+Dissatisfied verified buyers can leave negative reviews that could
+disincentivize future buyers, since reviews form the impression about the
+product and contribute to product's credibility and visibility, allowing it
+to stand out from the crowd. Over time, bad products or products with a
+poorly matching description will be marginalized and will not bring profits.
+There will also be a fee payable for publishing, very minimal but sufficient
+to make it costly to flood the platform with junk kernels or datasets.
+
+\item Worker nodes are motivated to do calculations correctly and stay
+available because they will not be paid and, additionally, will lose their
+collateral stake when their fault is detected in arbitrage. In addition, a
+moderate collateral stake is useful to prevent the creation of fake nodes
+that could burden the network.
+
+\item Verifier nodes have the incentive to check and report truthfully any
+discrepancies in the results of calculations, because they gain when they
+catch a faulty node and because they lose their stake in arbitrage if they
+slander a node that did no mistake.
+
+\item The customer has the motive to track any faulty results and resolve
+disputes correctly, because he wants to receive true calculation results and
+not pay for faulty calculations.
+\end{itemize}
+
+\section{Aligning of economic incentives}
+
+Let $p$ be the probability of cheating detection, $s$ the standard payment
+for work and $c$ the cost to produce the calculation.
+
+Let the standard collateral stake, lost when cheating is detected, be $w$
+for Worker node and $v$ for Verifier node, where $v\geq w$.
+
+In order for the network to operate, producing nearly perfect results in
+equilibrium, cheating must be unprofitable.
+
+\subsection{Prevention of worker cheating: collateral stake size vs
+probability of detection trade-off}
+
+Let's calculate the expected profits from cheating. The payoffs for each
+world condition are given in the following Table.
+
+\begin{tabular}{||l|l||}
+\hline\hline
+Decision to cheat & Payoff \\ \hline
+True node & $s-c$ \\ \hline
+False node (undetected) & $s$ \\ \hline
+False node (detected) & $-w$ \\ \hline\hline
+\end{tabular}
+
+The expected payoff when not cheating is $s-c$, i.e. standard payment for
+the assignment, minus the incurred cost.
+
+The expected payoff when cheating depends on the probability of detection $p$%
+. Hence it is $(1-p)s+p(-w)$, i.e. the expectation of standard payment $s$
+without any doing work minus the expectation to lose one's stake collateral
+deposit $w$.
+
+Hence the expected payoff for the strategy 1 is as follows:
+
+\begin{tabular}{||l|l||}
+\hline\hline
+Decision to cheat & Expected payoff \\ \hline
+True node & $s-c$ \\ \hline
+False node, dissolve if detected & $(1-p)s+p(-w)$ \\ \hline\hline
+\end{tabular}
+
+Therefore, cheating is not profitable when $s-c>(1-p)s+p(-w)\Longrightarrow
+p(s+w)>c$
+
+Observe that the result depends on all four parameters. It depends
+positively on the probability of detection $p$, the standard payment $s$ and
+the stake $w$; it depends adversely on the cost of calculations $c$.
+
+In order to quantify the above results, we need to make reasonable
+assumptions about the relation between payment $s$ and cost $c$. This
+depends on the "markup" (profit margin) $\frac{s-c}{c}$. If $\frac{s-c}{c}=0$
+then this markup is 0\%, therefore, $s=c$. If $\frac{s-c}{c}=1$ then this
+markup is 100\%, therefore $s=2c$.
+
+The Table below uses the formula $p(s+w)>c$ and shows how high the stake $w$
+need to be, relative to calculation cost $c$, in order to deter cheating.
+
+\begin{tabular}{||l|l|l||}
+\hline\hline
+$p$ & $\frac{s-c}{c}$ & $w$ \\ \hline
+$0.02$ & $0$ & $49c$ \\ \hline
+$0.02$ & $1$ & $48c$ \\ \hline
+$0.05$ & $0$ & $19c$ \\ \hline
+$0.05$ & $1$ & $18c$ \\ \hline
+$0.1$ & $0$ & $9c$ \\ \hline
+$0.1$ & $1$ & $8c$ \\ \hline
+$0.2$ & $0$ & $4c$ \\ \hline
+$0.2$ & $1$ & $3c$ \\ \hline\hline
+\end{tabular}
+
+Therefore we find that e.g. a combination of Worker stake $w=9c$ and
+repetition of calculations (i.e. probability of detection) $p=10\%$ would be
+sufficient to make cheating unprofitable, regardless the markup level.
+
+Note that the results are not very sensitive to a change in the markup.
+Instead, they are quite sensitive to a change in probability of detection $p$%
+. This is because the biggest impact on incentives comes from losing the
+collateral stake rather that from losing the payment for work. Hence a
+simplified, practical rule of thump $w\geq \frac{c}{p}$ could be used. The
+tradeoff is between increasing the probability of detection $p$ by costly
+repetition of calculations, versus having too high a stake that workers
+cannot afford.
+
+If $c$ is unobservable on the market, we can logically assume that $c\leq s$
+(otherwise the worker would operate at loss) and therefore we can use $s$ as
+proxy for maximum $c$. Therefore, the rule of thumb becomes $w\geq \frac{s}{p%
+}$.
+
+\subsection{Prevention of Verifier(s) cheating and their optimal number}
+
+The probability of detection $p$ is independent of the number of Verifiers
+that work on a task; it depends only on the percentage of work
+re-calculated. Any additional Verifier that repeats calculations increses
+the customer's cost sharply. However, increase in the number of Verifiers
+could potentially help to prevent collusion between the Worker and the
+Verifier (two Verifiers would be sufficient to create a Prisoner's Dilemma).
+Collusion can happen if the Worker could communicate to the Verifier the
+result that the Worker intends to send to the network. Knowing that result
+(and assuming that the Verifier believes the Worker's declaration), the
+Verifier could send the same result without doing the calculations. Since we
+cannot predict the futuristic technologies that can facilitate collusion
+(like smart contracts and automated prediction markets), it is easier to
+approach the problem by calculating the budget that the Worker node has to
+spend for facilitation of collusion. The Worker's maximum gain from getting
+paid without procuring any cost is $s$\thinspace . However, the gain of
+Verifier from reporting the Worker's results as faulty is $w$ (the
+confiscated worker stake), where $w>s$. In addition, as long as $v>w$, it is
+easy to setup bounty programs there Worker could benefit from luring the
+Verifier to collusion (by sacrificing $w)$ and then reporting him to the
+customer's arbitration to gain $v$. The Prisoner's dilemma already exists
+between the Worker and the Verifier, without the need for a second Verifier.
+Hence a rational Verifier will not collude with the Worker, unless of course
+they both happen to belong to the same actor. But any actor large enough to
+benefit consistently from such a coincidence is a large enough player to
+have its incentives aligned with the network's success and would likely not
+undermine it by cheating.
+
+\end{document}
