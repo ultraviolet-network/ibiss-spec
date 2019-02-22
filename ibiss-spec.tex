@@ -4,6 +4,7 @@
 \usepackage[english]{babel}
 \usepackage{authblk}
 \usepackage{adjustbox}
+\let\labelindent\relax
 \usepackage{enumitem}
 \usepackage{caption}
 \usepackage{xfrac}
@@ -27,32 +28,6 @@
 
 \newcolumntype{M}[1]{>{\raggedright\arraybackslash}m{#1}}
 
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{lightgray}, 
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{lightgray},
-    stringstyle=\color{codepurple},
-    basicstyle=\footnotesize,
-    breakatwhitespace=false,     
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
-}
-\lstset{style=mystyle}
- 
-\providecommand{\keywords}[1]
-{
-  \small	
-  \textbf{\textit{Keywords ---}} #1
-}
-
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}%
   \setlength{\parskip}{0pt}%
@@ -74,7 +49,9 @@
 Censorship resistant decentralised computing is a new topic in distributed systems theory. With the recent rise in popularity of Bitcoin as a censorship-resistant financial and transactional system a new technological field of blockchain and its applications appeared. This work addresses the problem of computational integrity proofs (correctness of the actual computations) made by some non-trusted (anonymous) third party without repeating the whole volume of the actual computing. The issue is usually addressed by use of probabilistically checkable proofs (PCP), however, such simple approach leave untouched the question of coupling the payments for the consumed computational resources with the actual proof. The purpose of our protocol is to scale distributed calculations by obtaining results of nearly perfect (measurable) quality, without the need to repeat calculations or check the computational integrity proofs by the client. This is achieved by providing meritocratic economic incentives to all participating economic agents, so that their interests are aligned with the network's success. As a result, the need for repeat calculations diminishes, and costs of calculations become lower and competitive. Ability to run PCP schemes without trusted checking party provides a way to codify the actual protocol in terms of smart contracts, so it can be used in a very compact form with existing economic blockchain layer. Our approach to protocol design aims at the smallest possible size of the shared system state so it can be implemented with any non-Turing complete smart contract system with storing nothing else then the account balances for the involved parties. For example, the protocol can be implemented with the existing Bitcoin script functionality with only two on-chain transactions per whole protocol computing cycle. In such system the PCP proofs are run the second layer on top of actual Bitcoin blockchain, reducing the footprint, price and increasing scalability for the real-world business cases for the computing.
 \end{abstract}
 
-\keywords{computational integrity, probibalistically checkable proofs, censorship resistance, decentralisation, distributed systems, Byzantine fault tolerance, game theory, cryptoeconomics, economic incentives, parallel computing, zero-knowledge computing}
+\begin{IEEEkeywords}
+computational integrity, probibalistically checkable proofs, censorship resistance, decentralisation, distributed systems, Byzantine fault tolerance, game theory, cryptoeconomics, economic incentives, parallel computing, zero-knowledge computing
+\end{IEEEkeywords}
 
 \section{Introduction}
 
@@ -251,9 +228,9 @@ In order for the network to operate, producing nearly perfect results in equilib
 
 Let's calculate the expected profits from cheating. The payoffs for each world condition are given in the following Table.
 
-\begin{table}[h]
+\begin{table}[ht]
     \caption{Basic payoff schedule}
-    \label{table:settlement}
+    \label{table:basicpayoff}
     \begin{adjustbox}{center}
         \begin{tabular}{l c}
             \toprule
@@ -273,9 +250,9 @@ The expected payoff when cheating depends on the probability of detection $p$\%.
 
 Hence the expected payoff for the strategy 1 is as follows:
 
-\begin{table}[h]
+\begin{table}[ht]
     \caption{Payoff schedule with detection probability $p$}
-    \label{table:settlement}
+    \label{table:advpayoff}
     \begin{adjustbox}{center}
         \begin{tabular}{l c}
             \toprule
@@ -297,9 +274,9 @@ markup is 100\%, therefore $s=2c$.
 
 The Table below uses the formula $p(s+w)>c$ and shows how high the stake $w$ need to be, relative to calculation cost $c$, in order to deter cheating.
 
-\begin{table}[h]
+\begin{table}[ht]
     \caption{Stake dependence on the cheating detection probability $p$}
-    \label{table:settlement}
+    \label{table:stakes}
     \begin{adjustbox}{center}
         \begin{tabular}{c c c}
             \toprule
