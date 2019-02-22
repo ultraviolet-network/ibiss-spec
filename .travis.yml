@@ -9,7 +9,7 @@ deploy:
   api_key:
     secure: 
   file:
-  - ./_build/ibiss-spe.pdf
+  - ./_build/ibiss-spec.pdf
   skip_cleanup: true
   on:
     tags: true
