@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[conference]{IEEEtran}
 
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -8,6 +8,7 @@
 \usepackage{caption}
 \usepackage{xfrac}
 \usepackage{array}
+\usepackage{pgf-umlsd}
 \usepackage{booktabs}
 \usepackage{xcolor}
 \usepackage{amsmath}
@@ -19,14 +20,10 @@
 \usepackage[T1]{fontenc}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
-\makeglossaries
-
 \usetikzlibrary{shapes,arrows}
 \usetikzlibrary{external}
 \tikzset{external/force remake}
 %\tikzexternalize
-
-\setlength{\parskip}{1em}
 
 \newcolumntype{M}[1]{>{\raggedright\arraybackslash}m{#1}}
 
@@ -50,26 +47,38 @@
 }
 \lstset{style=mystyle}
  
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords ---}} #1
+}
+
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}%
   \setlength{\parskip}{0pt}%
   \setlength{\topsep}{0pt}}
 
-\title{Provably-safe incentive-based interactive settlement scheme for computation integrity arguments (IBISS-CIA)}
+\title{Incentive-based interactive settlement scheme for computational integrity arguments (IBISS-CIA)}
 \author[1,2]{Maxim Orlovsky\thanks{orlovsky@bicalabs.org}}
 \author[1,3]{Sabina Sachtachtinskagia\thanks{sabina.aueb@gmail.com}}
 \affil[1]{Pandora Core AG, Switzerland}
 \affil[2]{BICA Labs, Switzerland}
 \affil[3]{Athens University of Economics and Business, Greece}
-\date{Version 0.2.0, working draft}
+\date{Working draft 2, revision 2}
 
 \begin{document}
 
 \maketitle
 
+\begin{abstract}
+Censorship resistant decentralised computing is a new topic in distributed systems theory. With the recent rise in popularity of Bitcoin as a censorship-resistant financial and transactional system a new technological field of blockchain and its applications appeared. This work addresses the problem of computational integrity proofs (correctness of the actual computations) made by some non-trusted (anonymous) third party without repeating the whole volume of the actual computing. The issue is usually addressed by use of probabilistically checkable proofs (PCP), however, such simple approach leave untouched the question of coupling the payments for the consumed computational resources with the actual proof. The purpose of our protocol is to scale distributed calculations by obtaining results of nearly perfect (measurable) quality, without the need to repeat calculations or check the computational integrity proofs by the client. This is achieved by providing meritocratic economic incentives to all participating economic agents, so that their interests are aligned with the network's success. As a result, the need for repeat calculations diminishes, and costs of calculations become lower and competitive. Ability to run PCP schemes without trusted checking party provides a way to codify the actual protocol in terms of smart contracts, so it can be used in a very compact form with existing economic blockchain layer. Our approach to protocol design aims at the smallest possible size of the shared system state so it can be implemented with any non-Turing complete smart contract system with storing nothing else then the account balances for the involved parties. For example, the protocol can be implemented with the existing Bitcoin script functionality with only two on-chain transactions per whole protocol computing cycle. In such system the PCP proofs are run the second layer on top of actual Bitcoin blockchain, reducing the footprint, price and increasing scalability for the real-world business cases for the computing.
+\end{abstract}
+
+\keywords{computational integrity, probibalistically checkable proofs, censorship resistance, decentralisation, distributed systems, Byzantine fault tolerance, game theory, cryptoeconomics, economic incentives, parallel computing, zero-knowledge computing}
+
 \section{Introduction}
 
-The progress in the field of computing led to the appearance of cloud computing platforms. The success of cloud computing was related to the economy of scale phenomenon, enhanced by the exponentially increasing amounts of produced data. However, it has created systematic risks and fragility, namely privacy risks, possibilities of totalitarian control, surveillance, single points of failure and possibilities of censorship. It has put at risk the further development of machine learning technology, started to be monopolised together with the access to big data. \href{https://manifesto.ai}{The \#FreeAI Manifesto} had declared an initiative to oppose this dramatic trend, and this work aims at the development of the technology stack, which can address the issue.
+The progress in the field of computing led to the appearance of cloud computing platforms. The success of cloud computing was related to the economy of scale phenomenon, enhanced by the exponentially increasing amounts of produced data \cite{cloudcomputing}. However, it has created systematic risks and fragility, namely privacy risks, possibilities of totalitarian control, surveillance, single points of failure and possibilities of censorship \cite{cc-censorship2, cc-censorship1}. It has put at risk the further development of machine learning technology, started to be monopolised together with the access to big data. \href{https://manifesto.ai}{The \#FreeAI Manifesto} \cite{freeai} had declared an initiative to oppose this dramatic trend, and this work aims at the development of the technology stack, which can address the issue.
 
 The problem of censorship-resistant computing can be split into the following parts:
 \begin{enumerate}[topsep=0pt]
@@ -82,12 +91,23 @@ The problem of censorship-resistant computing can be split into the following pa
         Performing high-load computing on big data in anonymous and censorship-resistant and (desirable) private manner (for the cases when personal computing resources are not enough to perform the actual computation).
 \end{enumerate}
 
-Here we address only the third matter. The first two matters can be addresses with many other existing initiatives, such as dark anonymous markets with escrow, cryptography technologies, zero-knowledge, distributed storage and data transfer (Torrent, IPFS etc.).
+In the present work we address only the third matter. The first two matters can be addresses with many other existing initiatives, such as dark anonymous markets with escrow, cryptography technologies, zero-knowledge, distributed storage and data transfer (BitTorrent, IPFS etc) \cite{ipfs, bittorrent, afs, tor, gnunet}. We attempt to develop a model that would estimate the possible severity of the problem and provide a solution. We use Games Theory methods to study the incentives of network participants and propose ways to align their incentives with those of the network as a whole. The network is therefore redesigned in such a way that all participants, following their "egoistic" incentives and maximizing their own profits, arrive to contributing to network's success.
 
-The technical problem we need to address here is how to prove computational integrity (correctness of the actual computations) made by some non-trusted (anonymous) third party without repeating the whole volume of the actual computing. This issue is usually addressed by use of probabilistically checkable proofs (PCP) [], however, they leave untouched the question of coupling the payments for the consumed computational resources with the actual proof. The purpose of our protocol is to scale distributed calculations by obtaining results of nearly perfect (measurable) quality, without the need to repeat calculations or check the computational integrity proofs by the client. This is achieved by providing meritocratic economic incentives to all participating economic agents, so that their interests are aligned with the network's success. As a result, the need for repeat calculations diminishes, and costs of calculations become lower and competitive.
+The technical problem we need to address here is how to prove computational integrity (correctness of the actual computations) made by some non-trusted (anonymous) third party without repeating the whole volume of the actual computing. This is done by enhancing probabilistically checkable proofs (PCP) \cite{pcp, pcpibm} with the ability to run PCP schemes without trusted checking party. Such protocol can be codified in terms of smart contracts, so it can be used in a very compact form with existing economic blockchain layer. Our approach to protocol design aims at the smallest possible size of the shared system state so it can be implemented with any non-Turing complete smart contract system with storing nothing else then the account balances for the involved parties. For example, the protocol can be implemented not only with WASM \cite{webassembly} or EVM \cite{evm} systems, but also using the existing Bitcoin script functionality with only two on-chain transactions per whole protocol computing cycle. In such system the PCP proofs are run the second layer on top of actual Bitcoin blockchain (or it's sidechains \cite{sidechains, typhon}), reducing the footprint, price and increasing scalability for the real-world business cases for the computing. 
 
-Ability to run PCP schemes without trusted checking party provides a way to codify the actual protocol in terms of smart contracts, so it can be used in a very compact form with existing economic blockchain layer. Our approach to protocol design aims at the smallest possible size of the shared system state so it can be implemented with any non-Turing complete smart contract system with storing nothing else then the account balances for the involved parties. For example, the protocol can be implemented with the existing Bitcoin script functionality with only two on-chain transactions per whole protocol computing cycle. In such system the PCP proofs are run the second layer on top of actual Bitcoin blockchain, reducing the footprint, price and increasing scalability for the real-world business cases for the computing. 
+The proposed solution is twofold. Firstly, we introduce a more meritocratic approach, where network participants need to assume responsibility by putting something at stake if they want to receive gains from the network. The greater the rewards that a participant opts for, the greater is the stake that will be lost if the participant does not produce contributions of acceptable quality. Secondly, we develop a process of arbitration, which is essentially a process of quality control and network protection applied specifically to distributed ledgers. Arbitration is about re-checking random parts of work done by network participants and resolving conflicting opinions whenever they occur. We also develop instruments that help to estimate the probability and costs of attack on the network, whether for personal gain or for disruption of its services. Finally, we attempt to align the incentives of all network participants so that the network would be able to use quality control sparingly, e.g. checking only 10\%-15\% of all work done, and still achieve high quality results.
 
+
+\section{Previous work}
+\label{previouswork}
+
+The development of decentralized  environments in general and smart contracts in particular is a very recent phenomenon, hence there is not much economic literature existent in this field. The generic source on which we build our study is the theory of incentives, and in particular the topics of moral hazard and adverse selection, e.g. as analyzed extensively in the seminal book by Laffont and Martimort \cite{Laffont}. However, that literature refers mostly to vertical chains, while our study pertains to multi-agent decentralized networks. Another stream of economic literature worthy of reference is that about the free-rider problem. For a description of this problem from game theory perspective, see e.g. chapter 6.2 in Fudenberg and Tirole \cite{gametheory}. In a sense, the nodes of blockchain that try to receive rewards without doing their share of work can be seen as free-riding on the network. Despite this similarity, the blockchain by definition may not have a central planner, but only a protocol that acts according to predetermined rules that were accepted voluntarily by all participants of the network.
+
+At the same time, our work is closely related to the recent cross-disciplinary game theory and computer science research on proof of work, proof of stake and other types of consensuses. There is a significant literature on the proof of work protocol that allows to remove the implicit assumption of the honesty of the majority miners, and proves instead that their incentives to be honest by finding the Nash equilibrium that they follow. Some important contributions on this topics are \cite{Houy, Badertscher}. The specific topic of computations verification, which is the central part of our work, has been previously tackled e.g. \cite{Kumaresan}, albeit in Bitcoin mining environment. On the other hand, the idea to use  economic incentives through collateral stakes in order to secure the network is widespread nowadays, see for example \cite{ouroboros, snowwhite}. However, our model is distinctly different from these streams of literature because we use at the same time stakes incentives (punishment for cheating), work incentives (payment for the actual useful work done) and do not require a global consensus. Since our point of interest are calculations and not coin mining itself, we therefore avoid the discussion about consensus and need not examine here the coin mining incentives. 
+
+A model that indeed bears similarity to ours is found in \cite{truebit} that describe the Truebit project. Their approach is different from ours primarily because they use a pool of validators that work on checking calculations simultaneously for a bounty. While adding to network's reliability, that raises the cost of verification to over 500\% of the cost of the calculation itself according to the same authors estimation, which is not very competitive compared to the centralized solution. In contrast, our aim is to achieve reliable calculation results while checking only a small part of calculations by using economically incentivized, randomly selected validators.
+
+Probabilistically checkable proofs (PCP) are well-known interactive and non-interactive schemes for computational integrity arguments \cite{pcp, pcpibm}. However, they leave untouched the question of coupling the payments for the consumed computational resources with the actual proof. The purpose of our protocol is to scale distributed calculations by obtaining results of nearly perfect (measurable) quality, without the need to repeat calculations or check the computational integrity proofs by the client. This is achieved by providing meritocratic economic incentives to all participating economic agents, so that their interests are aligned with the network's success \cite{anonymity, bitcoin}. As a result, the need for repeat calculations diminishes, and costs of calculations become lower and competitive.
 
 \section{Game model}
 \label{gamemodel}
@@ -100,19 +120,19 @@ The protocol design includes the following types of participants:
     \item[Client node $C$:] party prepared to pay for the actual computing and provide necessary data for it.
     \item[Worker node $W$:] party prepared to perform actual computing for some reward $s$.
     \item[Verifier node $V$:] party prepared to verify the actual computing using PCP for some reward $\sfrac{s}{z} \ll s$
-    \item[Arbiter nodes $A$:] special party required only in case of \Gls{Arbitration} procedure (see \ref{arbitration} below)
+    \item[Arbiter nodes $A$:] special party required only in case of \textbf{Arbitration} procedure (see \ref{arbitration} below)
 \end{description}
 
-The client node splits the actual computing task into \gls{batches} suitable for parallel processing in a distributed P2P network. The protocol run for each separate batch independently.
+The client node splits the actual computing task into \textbf{batches} suitable for parallel processing in a distributed P2P network. The protocol run for each separate batch independently.
 
 The Client comes with a take-it-or-leave-it offer that Worker and Verifier can agree to sign. The offer is a contract to do calculations (Work) for a Payment, which is split in a predetermined way between $W$ and $V$. The Worker shall calculate all the Work, while the Verifier shall calculate only a small portion of Work that is called Sample (described more fully at \ref{calculation}). 
 
 \subsection{Selection of Worker and Verifier}
 \label{selection}
 
-According to the contract, the \Gls{Payment} ($c$), the \Gls{Worker Collateral Stake} ($w$) and the \Gls{Verifier Collateral Stake} ($v$) are deposited to \Gls{Escrow}, to be released under certain conditions described in this text. Since calculations incure costs (hardware, electricity), the incentive to report false results without doing actual calculations is countered by providing collateral stakes that can be slashed if cheating is detected. It is economically logical that $v$ is larger or equal to $w$, where the case $w=v$ has certain merits of symmetry against attacks on stake. It is also economically logical that \Gls{Verifier}'s work should be more expensive (per unit of calculations). This is because \Gls{Verifier}'s stake is locked for approximately the same time as \Gls{Worker}, but \Gls{Verifier}'s total reward is less than Worker's total reward (since much less work is done).
+The client selects Worker and Verifier nodes on some open market or by auction (the actual selection is not part of this protocol). They agree upon the price of the computing and stakes (see below) in the process of off-chain P2P communications, like ones that can be built on top of Kademilia \cite{kademlia} or libp2p \cite{libp2p} protocols. The Client comes to independent agreements with the selected Worker and Verifier about contract terms. The contract for Work is signed by all three parties: $C$, $W$, $V$ - this ends this stage. Until the contract is signed, there are no further stages.
 
-The client selects Worker and Verifier nodes on some open market or by auction (the actual selection is not part of this protocol). They agree upon the price of the computing and stakes (see below) in the process of off-chain P2P communications. The Client comes to independent agreements with the selected Worker and Verifier about contract terms. The contract for Work is signed by all three parties: $C$, $W$, $V$ - this ends this stage. Until the contract is signed, there are no further stages.
+According to the contract, the \textit{Payment} ($c$), the \textit{Worker Collateral Stake} ($w$) and the \textit{Verifier Collateral Stake} ($v$) are deposited to \textit{Escrow}, to be released under certain conditions described in this text. Since calculations incure costs (hardware, electricity), the incentive to report false results without doing actual calculations is countered by providing collateral stakes that can be slashed if cheating is detected. It is economically logical that $v$ is larger or equal to $w$, where the case $w=v$ has certain merits of symmetry against attacks on stake. It is also economically logical that Verifier's work should be more expensive (per unit of calculations). This is because Verifier's stake is locked for approximately the same time as Worker, but Verifier's total reward is less than Worker's total reward (since much less work is done).
 
 \subsection{Worker's calculations of Work}
 \label{calculation}
@@ -123,7 +143,7 @@ If the Worker fails to send the Sample result by a certain time, then he is pena
 
 If the Worker sees that data are invalid and cannot be used for calculations, then there are various options to deal with the problem. One easy option is to allow the Worker to proceed as normal with the contract, and the Verifier and Arbiters should consider any results reported by the Worker as correct, and Client must give the full amount of Payment for this Work. This option has transparent design and should lead to a provable Nash equilibrium. Other options, in my opinion, are less solid and should be considered only if the first option is impractical for "marketing" reasons (it punishes Client's mistakes harshly).
 
-The second option is to introduce a special subsequent stage which allows the Worker to back off from the contract after being the data (if this is allowed without penalties, it makes possible a stalling attack by the Worker, but if we add a small penalty, it makes possible a flooding attack by the Client, so neither solution is perfect). Another option is to have Worker and Verifier both agree on poor quality of data, in which case the Client can receive refund of Payment minus a small penalty (while if Verifier does not agree with Worker on poor quality of data, then either Arbitration, or the Worker can back off from the contract with some penalty). Whether the Client should be entitled to start Arbitration over the quality of data is questionable: it creates a tradeoff between burdening the Arbiters with the trivial task of data checking (if $C$, $W$, $V$ do not all agree) and assigning minor penalties to Client that cannot be protested in Arbitration \ref{arbitration}.
+The second option is to introduce a special subsequent stage which allows the Worker to back off from the contract after being the data (if this is allowed without penalties, it makes possible a stalling attack by the Worker, but if we add a small penalty, it makes possible a flooding attack by the Client, so neither solution is perfect). Another option is to have Worker and Verifier both agree on poor quality of data, in which case the Client can receive refund of Payment minus a small penalty (while if Verifier does not agree with Worker on poor quality of data, then either Arbitration, or the Worker can back off from the contract with some penalty). Whether the Client should be entitled to start Arbitration over the quality of data is questionable: it creates a trade-off between burdening the Arbiters with the trivial task of data checking (if $C$, $W$, $V$ do not all agree) and assigning minor penalties to Client that cannot be protested in Arbitration \ref{arbitration}.
 
 \subsection{Verifier's calculations of Sample}
 \label{verification}
@@ -300,10 +320,20 @@ The Table below uses the formula $p(s+w)>c$ and shows how high the stake $w$ nee
 
 Therefore we find that e.g. a combination of Worker stake $w=9c$ and repetition of calculations (i.e. probability of detection) $p=10\%$ would be sufficient to make cheating unprofitable, regardless the markup level. Note that the results are not very sensitive to a change in the markup. Instead, they are quite sensitive to a change in probability of detection $p$\%. This is because the biggest impact on incentives comes from losing the collateral stake rather that from losing the payment for work. Hence a simplified, practical rule of thump $w\geq \frac{c}{p}$ could be used. The tradeoff is between increasing the probability of detection $p$ by costly repetition of calculations, versus having too high a stake that workers cannot afford.
 
-If $c$ is unobservable on the market, we can logically assume that $c\leq s$ (otherwise the worker would operate at loss) and therefore we can use $s$ as proxy for maximum $c$. Therefore, the rule of thumb becomes $w\geq \frac{s}{p\%}$.
+If $c$ is unobservable on the market, we can logically assume that $c\leq s$ (otherwise the worker would operate at loss) and therefore we can use $s$ as proxy for maximum $c$. Therefore, the rule of thumb becomes $w\geq \frac{s}{p}$.
 
 \subsection{Prevention of Verifier(s) cheating and their optimal number}
 
 The probability of detection $p$ is independent of the number of Verifiers that work on a task; it depends only on the percentage of work re-calculated. Any additional Verifier that repeats calculations increases the customer's cost sharply. However, increase in the number of Verifiers could potentially help to prevent collusion between the Worker and the Verifier (two Verifiers would be sufficient to create a Prisoner's Dilemma). Collusion can happen if the Worker could communicate to the Verifier the result that the Worker intends to send to the network. Knowing that result (and assuming that the Verifier believes the Worker's declaration), the Verifier could send the same result without doing the calculations. Since we cannot predict the futuristic technologies that can facilitate collusion (like smart contracts and automated prediction markets), it is easier to approach the problem by calculating the budget that the Worker node has to spend for facilitation of collusion. The Worker's maximum gain from getting paid without procuring any cost is $s$. However, the gain of Verifier from reporting the Worker's results as faulty is $w$ (the confiscated worker stake), where $w>s$. In addition, as long as $v>w$, it is easy to setup bounty programs where Worker could benefit from luring the Verifier to collusion (by sacrificing $w$) and then reporting him to the customer's arbitration to gain $v$. The Prisoner's dilemma already exists between the Worker and the Verifier, without the need for a second Verifier. Hence a rational Verifier will not collude with the Worker, unless of course they both happen to belong to the same actor. But any actor large enough to benefit consistently from such a coincidence is a large enough player to have its incentives aligned with the network's success and would likely not undermine it by cheating.
+
+\section{Conclusion}
+
+In this paper, we have examined the incentives of network participants to cheat the network by reaping rewards without doing the proper contribution. These observations are not limited to the market for distributed calculations, but may apply to any decentralized economic sector where the free rider problem is present. We have searched for resolutions of this problem by means of the network itself, without any centralized intervention, and we recommend to introduce the skin in the game factor (node stakes). In addition, we recommend two-staged verification and arbitration process that may have variations, but generally is centered on i) detection of the discrepancy in outcomes, ii) attempt to resolve the dilemma cheaply and efficiently, iii) if impossible, then call for crowdsource to protect the network from attack.
+
+Specifically in our model, we find that if detection of cheating is imperfect, it could be profitable to report fake calculations results without calculating, hoping to remain undetected. We also find that, once cheating is detected, arbitration works quite well and does not present a weak point. The most effective attacking strategy is to cheat, but surrender (and not raise) the collateral stake if caught. Therefore it is recommended to increase  the network's ability to deter this cheating strategy. This can be done by setting carefully the parameters of the network, primarily by keeping the stakes of nodes high enough, to ensure that those who reach for rewards have skin in the game.
+
+\nocite{*}
+\bibliographystyle{abbrv}
+\bibliography{ibiss-spec}
 
 \end{document}
